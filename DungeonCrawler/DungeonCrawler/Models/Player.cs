@@ -1,4 +1,5 @@
 ﻿using DungeonCrawler.Interfaces;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace DungeonCrawler.Models;
 
@@ -8,7 +9,7 @@ public class Player : ICharacter
     public int Health { get; private set; }
     public int Attack { get; private set; }
     public int Defense { get; private set; }
-    public List<string> Inventory { get; private set; } = [];
+    public List<Item> Inventory { get; private set; } = [];
 
     public Player(string name, int health, int attack, int defense)
     {
@@ -29,5 +30,21 @@ public class Player : ICharacter
             return false;
         else 
             return true;
+    }
+
+    public void UseItem(Item item)
+    {
+        if (Inventory.Contains(item))
+        {
+            Attack += item.AttackBonus;
+            Defense += item.DefenseBonus;
+            Health += item.Healing;
+            Inventory.Remove(item); 
+        }
+    }
+
+    public void AddItem(Item item) 
+    { 
+        Inventory.Add(item); 
     }
 }
