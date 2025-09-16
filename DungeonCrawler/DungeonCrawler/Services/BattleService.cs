@@ -1,4 +1,6 @@
 ﻿using DungeonCrawler.Models;
+using System.Numerics;
+using System.Threading;
 
 namespace DungeonCrawler.Services;
 
@@ -6,28 +8,33 @@ public class BattleService
 {
     private readonly Random _bonus = new Random();
 
-    public string Fight(Player player, Monster monster)
+    public void Fight(Player player, Monster monster)
     {
-        while (player.IsAlive() && monster.IsAlive())
+        while (true)
         {
-            int playerBonus = _bonus.Next(1, 10);
-            int playerDamage = player.Attack - monster.Defense + playerBonus;
-            monster.TakeDamage(playerDamage);
-
+            monster.TakeDamage(CountDamage(player.Attack, monster.Defense, player.Name, monster.Name));
             if (!monster.IsAlive())
             {
-                return $"{player.Name} defeated {monster.Name}!";
+                Console.WriteLine($"{player.Name} defeated {monster.Name}!");
             }
 
-            int monsterBonus = _bonus.Next(1, 10);
-            int monsterDamage = monster.Attack - player.Defense + monsterBonus;
-            player.TakeDamage(monsterDamage);
-
+            player.TakeDamage(CountDamage(monster.Attack, player.Defense, monster.Name, player.Name));
             if (!player.IsAlive())
             {
-                return $"{monster.Name} defeated {player.Name}!";
+                Console.WriteLine($"{monster.Name} defeated {player.Name}!");
             }
         }
-        return "The fight ended in a draw.";
+    }
+
+    private int CountDamage(int attack, int defense, string attackerName, string opponentName)
+    {
+        var damage = attack - defense + _bonus.Next(0, 3);
+        if (damage < 1)
+        {
+            damage = 1;
+        }
+
+        Console.WriteLine($"{attackerName} dealt {damage} damage to {opponentName}.");
+        return damage;
     }
 }
