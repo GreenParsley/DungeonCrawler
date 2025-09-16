@@ -25,6 +25,6 @@ static IHostBuilder CreateHostBuilder(string[] args)
         .ConfigureServices((builder, services) =>
         {
             services.AddSingleton<App>();
-            services.AddScoped<Test>();
+            //services.AddScoped<Test>();
         });
 }
