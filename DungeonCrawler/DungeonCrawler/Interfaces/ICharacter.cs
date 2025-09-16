@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace DungeonCrawler.Interfaces;
 
-namespace DungeonCrawler.Interfaces
+public interface ICharacter
 {
-    internal interface ICharacter
-    {
-    }
+    string Name { get; }
+    int Health { get; }
+    int Attack { get; }
+    int Defense { get; }
+
+    void TakeDamage(int damage);
+
+    bool IsAlive();
 }
