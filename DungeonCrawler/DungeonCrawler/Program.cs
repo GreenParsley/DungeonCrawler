@@ -1,4 +1,6 @@
 ﻿using DungeonCrawler;
+using DungeonCrawler.Services;
+using DungeonCrawler.Utils;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -25,6 +27,9 @@ static IHostBuilder CreateHostBuilder(string[] args)
         .ConfigureServices((builder, services) =>
         {
             services.AddSingleton<App>();
-            //services.AddScoped<Test>();
+            services.AddScoped<ItemFactory>();
+            services.AddScoped<MonsterFactory>();
+            services.AddScoped<RoomFactory>();
+            services.AddScoped<BattleService>();
         });
 }
