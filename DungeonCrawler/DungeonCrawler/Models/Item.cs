@@ -14,4 +14,11 @@ public class Item
         DefenseBonus = defenseBonus;
         Healing = healing;
     }
+
+    public void Use(Player player)
+    {
+        player.Attack += AttackBonus;
+        player.Defense += DefenseBonus;
+        player.Health += Healing;
+    }
 }
