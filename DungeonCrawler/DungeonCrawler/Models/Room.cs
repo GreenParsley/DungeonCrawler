@@ -55,6 +55,7 @@ public class MonsterRoom : Room
     public override void Enter(Player player)
     {
         var monster = _monsterFactory.CreateMonster();
+        Console.WriteLine($"You met the {monster.Name}!");
         _battleService.Fight(player, monster);
     }
 }
