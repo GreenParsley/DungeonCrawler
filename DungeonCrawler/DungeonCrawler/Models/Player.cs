@@ -36,4 +36,31 @@ public class Player : ICharacter
     { 
         Inventory.Add(item); 
     }
+
+    public void UseItem()
+    {
+        Console.WriteLine("Do you want to open your inventory? y/n");
+        var isOpen = Console.ReadLine();
+        if (isOpen != "y")
+        {
+            return;
+        }
+
+        Console.WriteLine("Which item do you want to use? Select a number.");
+        for (int i = 0; i < Inventory.Count; i++)
+        {
+            Console.WriteLine($"{i} - {Inventory[i].Name}");
+        }
+
+        Console.WriteLine("Q - quit");
+        var action = Console.ReadLine();
+        if (action == "Q")
+        {
+            return;
+        }
+
+        var item = Inventory[int.Parse(action)];
+        item.Use(this);
+        Inventory.Remove(item);
+    }
 }

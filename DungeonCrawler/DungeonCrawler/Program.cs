@@ -31,5 +31,8 @@ static IHostBuilder CreateHostBuilder(string[] args)
             services.AddScoped<MonsterFactory>();
             services.AddScoped<RoomFactory>();
             services.AddScoped<BattleService>();
+            services.AddSingleton<DungeonMapService>();
+            services.AddSingleton<MovementService>();
+            services.AddSingleton<GameService>();
         });
 }

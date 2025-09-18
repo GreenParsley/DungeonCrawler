@@ -16,12 +16,14 @@ public class BattleService
             if (!monster.IsAlive())
             {
                 Console.WriteLine($"{player.Name} defeated {monster.Name}!");
+                return;
             }
 
             player.TakeDamage(CountDamage(monster.Attack, player.Defense, monster.Name, player.Name));
             if (!player.IsAlive())
             {
                 Console.WriteLine($"{monster.Name} defeated {player.Name}!");
+                return;
             }
         }
     }
