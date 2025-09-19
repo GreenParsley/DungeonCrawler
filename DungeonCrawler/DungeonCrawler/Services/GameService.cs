@@ -6,18 +6,16 @@ public class GameService
 {
     private readonly int _xExitPosition;
     private readonly int _yExitPosition;
-    private readonly MovementService _movementService;
 
-    public GameService(DungeonMapService dungeonMapService, MovementService movementService)
+    public GameService()
     {
-        _xExitPosition = dungeonMapService.Width - 1;
-        _yExitPosition = dungeonMapService.Height - 1;
-        _movementService = movementService;
+        _xExitPosition = GameSettings.MaxMazeWidth - 1;
+        _yExitPosition = GameSettings.MaxMazeHeight - 1;
     }
 
-    public bool IsOnExit()
+    public bool IsOnExit(Player player)
     {
-        if (_xExitPosition == _movementService.XPlayerPosition && _yExitPosition == _movementService.YPlayerPosition) 
+        if (_xExitPosition == player.XPlayerPosition && _yExitPosition == player.YPlayerPosition) 
         {
             Console.WriteLine("You left the dungeon!");
             return true;

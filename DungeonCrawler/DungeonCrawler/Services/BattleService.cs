@@ -16,6 +16,7 @@ public class BattleService
             if (!monster.IsAlive())
             {
                 Console.WriteLine($"{player.Name} defeated {monster.Name}!");
+                player.DisplayStats();
                 return;
             }
 
@@ -23,6 +24,7 @@ public class BattleService
             if (!player.IsAlive())
             {
                 Console.WriteLine($"{monster.Name} defeated {player.Name}!");
+                monster.DisplayStats();
                 return;
             }
         }

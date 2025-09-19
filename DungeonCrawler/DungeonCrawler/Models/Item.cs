@@ -21,4 +21,9 @@ public class Item
         player.Defense += DefenseBonus;
         player.Health += Healing;
     }
+
+    public void DisplayStats()
+    {
+        Console.WriteLine($"Name: {this.Name},\nAttack bonus: {this.AttackBonus},\nDefense bonus: {this.DefenseBonus},\nHealing: {this.Healing}\n");
+    }
 }

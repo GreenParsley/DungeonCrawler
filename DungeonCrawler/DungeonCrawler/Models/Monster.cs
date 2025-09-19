@@ -8,12 +8,14 @@ public class Monster : ICharacter
     public int Health { get; private set; }
     public int Attack { get; private set; }
     public int Defense { get; private set; }
-    public Monster(string name, int health, int attack, int defense)
+    public int Level { get; private set; }
+    public Monster(string name, int health, int attack, int defense, int level)
     {
         Name = name;
         Health = health;
         Attack = attack;
         Defense = defense;
+        Level = level;
     }
 
     public void TakeDamage(int damage)
@@ -27,5 +29,10 @@ public class Monster : ICharacter
             return false;
         else
             return true;
+    }
+
+    public void DisplayStats()
+    {
+        Console.WriteLine($"Name: {this.Name},\nHealth: {this.Health},\nAttack: {this.Attack},\nDefense: {this.Defense}\n");
     }
 }

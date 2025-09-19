@@ -10,4 +10,6 @@ public interface ICharacter
     void TakeDamage(int damage);
 
     bool IsAlive();
+
+    void DisplayStats();
 }
