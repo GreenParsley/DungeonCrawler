@@ -28,11 +28,12 @@ static IHostBuilder CreateHostBuilder(string[] args)
         {
             services.AddSingleton<App>();
             services.AddScoped<ItemFactory>();
-            services.AddScoped<MonsterFactory>();
+            services.AddTransient<MonsterFactory>();
             services.AddScoped<RoomFactory>();
             services.AddScoped<BattleService>();
             services.AddSingleton<DungeonMapService>();
             services.AddSingleton<MovementService>();
             services.AddSingleton<GameService>();
+            services.AddScoped<CommunicationService>();
         });
 }

@@ -10,6 +10,13 @@ public class RoomFactory
     private readonly MonsterFactory _monsterFactory;
     private readonly BattleService _battleService;
     private readonly List<RoomEventType> _roomEventTypes = [RoomEventType.Treasure, RoomEventType.Trap, RoomEventType.Empty, RoomEventType.Monster];
+    private readonly Dictionary<RoomEventType, int> _weight = new()
+    {
+        { RoomEventType.Monster, 40 },
+        { RoomEventType.Treasure, 30 },
+        { RoomEventType.Trap, 20 },
+        { RoomEventType.Empty, 10 }
+    };
 
     public RoomFactory(ItemFactory itemFactory, MonsterFactory monsterFactory, BattleService battleService)
     {
@@ -38,7 +45,17 @@ public class RoomFactory
 
     private RoomEventType GetRoomEventType()
     {
-        var roomIndex = DrawService.GetRandomIndex(_roomEventTypes.Count);
-        return _roomEventTypes[roomIndex];
+        var totalWeight = _weight.Values.Sum();
+        var roll = DrawService.GetRandomIndex(totalWeight);
+        var currentSum = 0;
+        foreach (var roomTypeWeight in _weight)
+        {
+            currentSum += roomTypeWeight.Value;
+            if (roll < currentSum)
+            {
+                return roomTypeWeight.Key;
+            }
+        }
+        throw new Exception("No room generated");
     }
 }

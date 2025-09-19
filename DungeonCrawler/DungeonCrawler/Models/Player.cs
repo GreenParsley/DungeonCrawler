@@ -1,4 +1,5 @@
 ﻿using DungeonCrawler.Interfaces;
+using DungeonCrawler.Services;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace DungeonCrawler.Models;
@@ -10,6 +11,8 @@ public class Player : ICharacter
     public int Attack { get; set; }
     public int Defense { get; set; }
     public List<Item> Inventory { get; private set; } = [];
+    public int XPlayerPosition { get; set; } = 0;
+    public int YPlayerPosition { get; set; } = 0;
 
     public Player(string name, int health, int attack, int defense)
     {
@@ -39,6 +42,9 @@ public class Player : ICharacter
 
     public void UseItem()
     {
+        if (Inventory.Count == 0)
+            return;
+
         Console.WriteLine("Do you want to open your inventory? y/n");
         var isOpen = Console.ReadLine();
         if (isOpen != "y")
@@ -53,14 +59,18 @@ public class Player : ICharacter
         }
 
         Console.WriteLine("Q - quit");
-        var action = Console.ReadLine();
-        if (action == "Q")
+        var action = CommunicationService.GetIndex(Inventory.Count);
+        if (!action.HasQuit)
         {
-            return;
+            var item = Inventory[action.Index];
+            item.Use(this);
+            Inventory.Remove(item);
+            DisplayStats();
         }
+    }
 
-        var item = Inventory[int.Parse(action)];
-        item.Use(this);
-        Inventory.Remove(item);
+    public void DisplayStats()
+    {
+        Console.WriteLine($"Name: {this.Name},\nHealth: {this.Health},\nAttack: {this.Attack},\nDefense: {this.Defense}\n");
     }
 }

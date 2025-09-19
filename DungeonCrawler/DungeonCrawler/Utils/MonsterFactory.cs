@@ -5,18 +5,38 @@ namespace DungeonCrawler.Utils;
 
 public class MonsterFactory
 {
-    private readonly List<Monster> _monsters = [
-        new Monster("Cave Rat", 5, 1, 0),
-        new ("Slime Blob", 7, 1, 2),
-        new ("Orc Brute", 15, 5, 2),
-        new ("Ghoul", 20, 6, 4),
-        new ("Vampire Lord", 35, 15, 10),
-        new ("Necromancer", 60, 20, 15)
+    private readonly List<(string Name, int Health, int Attack, int Defense, int Level)> _monsterTemplates =
+    [
+        ("Cave Rat", 10, 5, 0, 1),
+        ("Slime Blob", 15, 7, 2, 1),
+        ("Orc Brute", 19, 10, 5, 2),
+        ("Ghoul", 26, 11, 6, 2),
+        ("Vampire Lord", 35, 15, 10, 3),
+        ("Necromancer", 60, 20, 15, 4)
     ];
 
-    public Monster CreateMonster()
+    private readonly Dictionary<int, int> _threshold = new()
     {
-        var monsterIndex = DrawService.GetRandomIndex(_monsters.Count);
-        return _monsters[monsterIndex];
+        {0, 1},
+        {5, 2},
+        {10,3},
+        {15,4}
+    };
+
+    public Monster CreateMonster(int xPlayerPosition, int yPlayerPosition)
+    {
+        var distance = xPlayerPosition + yPlayerPosition;
+        var maxAvailableLevel = _threshold
+            .Where(x => distance >= x.Key)
+            .Select(x => x.Value)
+            .DefaultIfEmpty(1)
+            .Max();
+
+        var availableTemplates = _monsterTemplates
+            .Where(t => t.Level <= maxAvailableLevel)
+            .ToList();
+        var monsterIndex = DrawService.GetRandomIndex(availableTemplates.Count);
+        var template = availableTemplates[monsterIndex];
+        return new Monster(template.Name, template.Health, template.Attack, template.Defense, template.Level);
     }
 }

@@ -6,17 +6,15 @@ namespace DungeonCrawler.Services;
 public class DungeonMapService
 {
     private readonly Room[,] _map;
-    public int Width { get; private set; } = 10;
-    public int Height { get; private set; } = 10;
 
     public DungeonMapService(RoomFactory roomFactory)
     {
-        _map = new Room[Width, Height];
-        for (var i = 0; i < Width; i++)
+        _map = new Room[GameSettings.MaxMazeWidth, GameSettings.MaxMazeHeight];
+        for (var i = 0; i < GameSettings.MaxMazeWidth; i++)
         {
-            for (var j = 0; j < Height; j++)
+            for (var j = 0; j < GameSettings.MaxMazeHeight; j++)
             {
-                _map[i, j] = roomFactory.GetRoom();
+                _map[j, i] = roomFactory.GetRoom();
             }
         }
     }
@@ -24,5 +22,22 @@ public class DungeonMapService
     public Room GetRoomAt(int x, int y)
     {
         return _map[x, y];
+    }
+
+    public void DisplayMap(int xPlayerPosition, int yPlayerPosition)
+    {
+        for (var i = 0; i < GameSettings.MaxMazeWidth; i++)
+        {
+            for (int j = 0; j < GameSettings.MaxMazeHeight; j++)
+            {
+                if (xPlayerPosition == j && yPlayerPosition == i)
+                    Console.Write("🧙");
+                else
+                {
+                    Console.Write(_map[j, i].Symbol);
+                }
+            }
+            Console.WriteLine();
+        }
     }
 }

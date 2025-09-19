@@ -5,6 +5,8 @@ namespace DungeonCrawler.Models;
 
 public abstract class Room
 {
+    public bool WasOpened { get; protected set; }
+    public string Symbol { get; protected set; } = "❓";
     public abstract void Enter(Player player);
 }
 
@@ -12,11 +14,17 @@ public class EmptyRoom : Room
 {
     public override void Enter(Player player)
     {
+        if (!WasOpened)
+        {
+            WasOpened = true;
+            Symbol = "🔓";
+
+        }
         Console.WriteLine("The room is empty.");
     }
 }
 
-public class TreasureRoom : Room
+public class TreasureRoom : EmptyRoom
 {
     private readonly ItemFactory _itemFactory;
 
@@ -27,22 +35,43 @@ public class TreasureRoom : Room
 
     public override void Enter(Player player)
     {
-        var item = _itemFactory.CreateItem();
-        player.Inventory.Add(item);
-        Console.WriteLine($"You found the {item.Name}!");
+        if (!WasOpened)
+        {
+            WasOpened = true;
+            Symbol = "💰";
+            var item = _itemFactory.CreateItem();
+            player.Inventory.Add(item);
+            Console.WriteLine($"You found the {item.Name}!");
+            item.DisplayStats();
+        }
+        else
+        {
+            base.Enter(player);
+        }
     }
 }
 
-public class TrapRoom : Room
+public class TrapRoom : EmptyRoom
 {
     public override void Enter(Player player)
     {
-        player.TakeDamage(10);
-        Console.WriteLine("It is a trap!");
+        if (!WasOpened)
+        {
+
+            WasOpened = true;
+            Symbol = "⚠️";
+            player.TakeDamage(10);
+            Console.WriteLine("It is a trap!");
+            player.DisplayStats();
+        }
+        else
+        {
+            base.Enter(player);
+        }
     }
 }
 
-public class MonsterRoom : Room
+public class MonsterRoom : EmptyRoom
 {
     private readonly MonsterFactory _monsterFactory;
     private readonly BattleService _battleService;
@@ -54,9 +83,19 @@ public class MonsterRoom : Room
     }
     public override void Enter(Player player)
     {
-        var monster = _monsterFactory.CreateMonster();
-        Console.WriteLine($"You met the {monster.Name}!");
-        _battleService.Fight(player, monster);
+        if (!WasOpened)
+        {
+            WasOpened = true;
+            Symbol = "💀";
+            var monster = _monsterFactory.CreateMonster(player.XPlayerPosition, player.YPlayerPosition);
+            Console.WriteLine($"You meet the {monster.Name}!");
+            monster.DisplayStats();
+            _battleService.Fight(player, monster);
+        }
+        else
+        {
+            base.Enter(player);
+        }
     }
 }
 
