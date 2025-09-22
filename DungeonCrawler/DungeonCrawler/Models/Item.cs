@@ -1,4 +1,6 @@
-﻿namespace DungeonCrawler.Models;
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace DungeonCrawler.Models;
 
 public class Item
 {
@@ -22,6 +24,7 @@ public class Item
         player.Health += Healing;
     }
 
+    [ExcludeFromCodeCoverage]
     public void DisplayStats()
     {
         Console.WriteLine($"Name: {this.Name},\nAttack bonus: {this.AttackBonus},\nDefense bonus: {this.DefenseBonus},\nHealing: {this.Healing}\n");

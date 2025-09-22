@@ -1,13 +1,17 @@
 ﻿using DungeonCrawler.Models;
+using DungeonCrawler.Services.Interfaces;
 using DungeonCrawler.Utils;
+using DungeonCrawler.Utils.Interfaces;
+using System.Diagnostics.CodeAnalysis;
 
 namespace DungeonCrawler.Services;
 
-public class DungeonMapService
+[ExcludeFromCodeCoverage]
+public class DungeonMapService : IDungeonMapService
 {
     private readonly Room[,] _map;
 
-    public DungeonMapService(RoomFactory roomFactory)
+    public DungeonMapService(IRoomFactory roomFactory)
     {
         _map = new Room[GameSettings.MaxMazeWidth, GameSettings.MaxMazeHeight];
         for (var i = 0; i < GameSettings.MaxMazeWidth; i++)

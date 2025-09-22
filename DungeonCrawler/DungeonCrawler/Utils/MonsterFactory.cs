@@ -1,9 +1,10 @@
 ﻿using DungeonCrawler.Models;
 using DungeonCrawler.Services;
+using DungeonCrawler.Utils.Interfaces;
 
 namespace DungeonCrawler.Utils;
 
-public class MonsterFactory
+public class MonsterFactory : IMonsterFactory
 {
     private readonly List<(string Name, int Health, int Attack, int Defense, int Level)> _monsterTemplates =
     [

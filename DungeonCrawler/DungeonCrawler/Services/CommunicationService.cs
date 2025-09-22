@@ -1,10 +1,9 @@
-﻿using DungeonCrawler.Enums;
-using System;
-using System.Net.NetworkInformation;
+﻿using System.Diagnostics.CodeAnalysis;
 
 namespace DungeonCrawler.Services;
 
-public class CommunicationService
+[ExcludeFromCodeCoverage]
+public static class CommunicationService
 {
     public static string GetValue(string message)
     {

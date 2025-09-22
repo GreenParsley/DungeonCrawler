@@ -1,4 +1,6 @@
 using DungeonCrawler.Models;
+using DungeonCrawlerTests.Builders;
+using FluentAssertions;
 
 namespace DungeonCrawlerTests.Models;
 
@@ -59,5 +61,18 @@ public class PlayerTest
 
         //Assert
         Assert.False(result);
+    }
+
+    [Fact]
+    public void AddItem_SuccessfullyAddItem_WhenAddingNewItem()
+    {
+        //Arrange
+        var item = new ItemBuilder().SetName("Item").SetAttackBonus(1).SetDefenseBonus(1).SetHealing(1).Build();
+
+        //Act
+        _cut.AddItem(item);
+
+        //Assert
+        _cut.Inventory.Should().Contain(item);
     }
 }

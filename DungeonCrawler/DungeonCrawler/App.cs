@@ -1,16 +1,17 @@
 ﻿using DungeonCrawler.Enums;
 using DungeonCrawler.Models;
 using DungeonCrawler.Services;
+using DungeonCrawler.Services.Interfaces;
 
 namespace DungeonCrawler;
 
 public class App
 {
-    private readonly MovementService _movementService;
-    private readonly GameService _gameService;
-    private readonly DungeonMapService _mapService;
+    private readonly IMovementService _movementService;
+    private readonly IGameService _gameService;
+    private readonly IDungeonMapService _mapService;
 
-    public App(MovementService movementService, GameService gameService, DungeonMapService mapService)
+    public App(IMovementService movementService, IGameService gameService, IDungeonMapService mapService)
     {
         _movementService = movementService;
         _gameService = gameService;

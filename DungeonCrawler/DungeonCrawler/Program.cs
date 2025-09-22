@@ -1,6 +1,8 @@
 ﻿using DungeonCrawler;
 using DungeonCrawler.Services;
+using DungeonCrawler.Services.Interfaces;
 using DungeonCrawler.Utils;
+using DungeonCrawler.Utils.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -27,13 +29,12 @@ static IHostBuilder CreateHostBuilder(string[] args)
         .ConfigureServices((builder, services) =>
         {
             services.AddSingleton<App>();
-            services.AddScoped<ItemFactory>();
-            services.AddTransient<MonsterFactory>();
-            services.AddScoped<RoomFactory>();
-            services.AddScoped<BattleService>();
-            services.AddSingleton<DungeonMapService>();
-            services.AddSingleton<MovementService>();
-            services.AddSingleton<GameService>();
-            services.AddScoped<CommunicationService>();
+            services.AddScoped<IItemFactory, ItemFactory>();
+            services.AddTransient<IMonsterFactory, MonsterFactory>();
+            services.AddScoped<IRoomFactory, RoomFactory>();
+            services.AddScoped<IBattleService, BattleService>();
+            services.AddSingleton<IDungeonMapService, DungeonMapService>();
+            services.AddSingleton<IMovementService, MovementService>();
+            services.AddSingleton<IGameService, GameService>();
         });
 }
