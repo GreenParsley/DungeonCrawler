@@ -1,10 +1,10 @@
 ﻿using DungeonCrawler.Models;
 using DungeonCrawler.Services;
-using System;
+using DungeonCrawler.Utils.Interfaces;
 
 namespace DungeonCrawler.Utils;
 
-public class ItemFactory
+public class ItemFactory : IItemFactory
 {
     private readonly List<Item> _items = [
         new Item("Rusty Blade", 5, 0, 0),

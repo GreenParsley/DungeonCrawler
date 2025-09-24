@@ -1,8 +1,9 @@
 ﻿using DungeonCrawler.Models;
+using DungeonCrawler.Services.Interfaces;
 
 namespace DungeonCrawler.Services;
 
-public class GameService
+public class GameService : IGameService
 {
     private readonly int _xExitPosition;
     private readonly int _yExitPosition;
@@ -15,14 +16,14 @@ public class GameService
 
     public bool IsOnExit(Player player)
     {
-        if (_xExitPosition == player.XPlayerPosition && _yExitPosition == player.YPlayerPosition) 
+        if (_xExitPosition == player.XPlayerPosition && _yExitPosition == player.YPlayerPosition)
         {
             Console.WriteLine("You left the dungeon!");
             return true;
         }
         else
-        { 
-            return false; 
+        {
+            return false;
         }
     }
 

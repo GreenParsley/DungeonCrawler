@@ -1,5 +1,6 @@
-﻿using DungeonCrawler.Services;
+﻿using DungeonCrawler.Services.Interfaces;
 using DungeonCrawler.Utils;
+using DungeonCrawler.Utils.Interfaces;
 
 namespace DungeonCrawler.Models;
 
@@ -26,9 +27,9 @@ public class EmptyRoom : Room
 
 public class TreasureRoom : EmptyRoom
 {
-    private readonly ItemFactory _itemFactory;
+    private readonly IItemFactory _itemFactory;
 
-    public TreasureRoom(ItemFactory itemFactory)
+    public TreasureRoom(IItemFactory itemFactory)
     {
         _itemFactory = itemFactory;
     }
@@ -73,10 +74,10 @@ public class TrapRoom : EmptyRoom
 
 public class MonsterRoom : EmptyRoom
 {
-    private readonly MonsterFactory _monsterFactory;
-    private readonly BattleService _battleService;
+    private readonly IMonsterFactory _monsterFactory;
+    private readonly IBattleService _battleService;
 
-    public MonsterRoom(MonsterFactory monsterFactory, BattleService battleService)
+    public MonsterRoom(IMonsterFactory monsterFactory, IBattleService battleService)
     {
         _monsterFactory = monsterFactory;
         _battleService = battleService;

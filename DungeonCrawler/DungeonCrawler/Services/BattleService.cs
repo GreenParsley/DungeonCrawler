@@ -1,10 +1,9 @@
 ﻿using DungeonCrawler.Models;
-using System.Numerics;
-using System.Threading;
+using DungeonCrawler.Services.Interfaces;
 
 namespace DungeonCrawler.Services;
 
-public class BattleService
+public class BattleService : IBattleService
 {
     private readonly Random _bonus = new Random();
 

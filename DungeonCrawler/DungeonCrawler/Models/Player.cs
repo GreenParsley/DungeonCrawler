@@ -1,5 +1,6 @@
 ﻿using DungeonCrawler.Interfaces;
 using DungeonCrawler.Services;
+using System.Diagnostics.CodeAnalysis;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace DungeonCrawler.Models;
@@ -45,8 +46,7 @@ public class Player : ICharacter
         if (Inventory.Count == 0)
             return;
 
-        Console.WriteLine("Do you want to open your inventory? y/n");
-        var isOpen = Console.ReadLine();
+        var isOpen = CommunicationService.GetValue("Do you want to open your inventory? y/n");
         if (isOpen != "y")
         {
             return;
@@ -69,6 +69,7 @@ public class Player : ICharacter
         }
     }
 
+    [ExcludeFromCodeCoverage]
     public void DisplayStats()
     {
         Console.WriteLine($"Name: {this.Name},\nHealth: {this.Health},\nAttack: {this.Attack},\nDefense: {this.Defense}\n");

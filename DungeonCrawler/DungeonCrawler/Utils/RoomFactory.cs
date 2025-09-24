@@ -1,14 +1,16 @@
 ﻿using DungeonCrawler.Enums;
 using DungeonCrawler.Models;
 using DungeonCrawler.Services;
+using DungeonCrawler.Services.Interfaces;
+using DungeonCrawler.Utils.Interfaces;
 
 namespace DungeonCrawler.Utils;
 
-public class RoomFactory
+public class RoomFactory : IRoomFactory
 {
-    private readonly ItemFactory _itemFactory;
-    private readonly MonsterFactory _monsterFactory;
-    private readonly BattleService _battleService;
+    private readonly IItemFactory _itemFactory;
+    private readonly IMonsterFactory _monsterFactory;
+    private readonly IBattleService _battleService;
     private readonly List<RoomEventType> _roomEventTypes = [RoomEventType.Treasure, RoomEventType.Trap, RoomEventType.Empty, RoomEventType.Monster];
     private readonly Dictionary<RoomEventType, int> _weight = new()
     {
@@ -18,7 +20,7 @@ public class RoomFactory
         { RoomEventType.Empty, 10 }
     };
 
-    public RoomFactory(ItemFactory itemFactory, MonsterFactory monsterFactory, BattleService battleService)
+    public RoomFactory(IItemFactory itemFactory, IMonsterFactory monsterFactory, IBattleService battleService)
     {
         _itemFactory = itemFactory;
         _monsterFactory = monsterFactory;

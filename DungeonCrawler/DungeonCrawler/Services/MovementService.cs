@@ -1,17 +1,18 @@
 ﻿using DungeonCrawler.Enums;
 using DungeonCrawler.Models;
+using DungeonCrawler.Services.Interfaces;
 
 namespace DungeonCrawler.Services;
 
-public class MovementService
+public class MovementService : IMovementService
 {
-    private readonly DungeonMapService _mapService;
+    private readonly IDungeonMapService _mapService;
 
-    public MovementService(DungeonMapService dungeonMapService)
+    public MovementService(IDungeonMapService dungeonMapService)
     {
         _mapService = dungeonMapService;
     }
-    
+
     public void Move(MoveType move, Player player)
     {
         switch (move)

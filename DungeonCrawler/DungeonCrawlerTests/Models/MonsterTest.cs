@@ -9,7 +9,7 @@ public class MonsterTest
 
     public MonsterTest()
     {
-        _cut = new Monster("ork", _baseHealth, 2, 0);
+        _cut = new Monster("ork", _baseHealth, 2, 0, 1);
     }
 
     [Theory]
