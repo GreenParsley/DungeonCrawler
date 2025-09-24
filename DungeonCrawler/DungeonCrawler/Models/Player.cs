@@ -1,7 +1,6 @@
 ﻿using DungeonCrawler.Interfaces;
 using DungeonCrawler.Services;
 using System.Diagnostics.CodeAnalysis;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace DungeonCrawler.Models;
 

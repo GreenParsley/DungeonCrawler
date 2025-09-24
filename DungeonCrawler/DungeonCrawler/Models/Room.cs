@@ -1,4 +1,5 @@
-﻿using DungeonCrawler.Services.Interfaces;
+﻿using DungeonCrawler.Enums;
+using DungeonCrawler.Services.Interfaces;
 using DungeonCrawler.Utils;
 using DungeonCrawler.Utils.Interfaces;
 
@@ -6,6 +7,7 @@ namespace DungeonCrawler.Models;
 
 public abstract class Room
 {
+    public RoomEventType Type { get; set; }
     public bool WasOpened { get; protected set; }
     public string Symbol { get; protected set; } = "❓";
     public abstract void Enter(Player player);
@@ -13,6 +15,11 @@ public abstract class Room
 
 public class EmptyRoom : Room
 {
+    public EmptyRoom()
+    {
+        Type = RoomEventType.Empty;
+    }
+
     public override void Enter(Player player)
     {
         if (!WasOpened)
@@ -32,6 +39,7 @@ public class TreasureRoom : EmptyRoom
     public TreasureRoom(IItemFactory itemFactory)
     {
         _itemFactory = itemFactory;
+        Type = RoomEventType.Treasure;
     }
 
     public override void Enter(Player player)
@@ -54,6 +62,11 @@ public class TreasureRoom : EmptyRoom
 
 public class TrapRoom : EmptyRoom
 {
+    public TrapRoom()
+    {
+        Type = RoomEventType.Trap;
+    }
+
     public override void Enter(Player player)
     {
         if (!WasOpened)
@@ -81,6 +94,7 @@ public class MonsterRoom : EmptyRoom
     {
         _monsterFactory = monsterFactory;
         _battleService = battleService;
+        Type = RoomEventType.Monster;
     }
     public override void Enter(Player player)
     {
