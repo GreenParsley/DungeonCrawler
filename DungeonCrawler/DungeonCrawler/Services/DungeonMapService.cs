@@ -17,7 +17,7 @@ public class DungeonMapService : IDungeonMapService
         {
             for (var j = 0; j < GameSettings.MaxMazeHeight; j++)
             {
-                _map[j, i] = roomFactory.GetRoom();
+                _map[j, i] = roomFactory.GetRoom(i == 0 && j == 0);
             }
         }
     }
@@ -42,5 +42,6 @@ public class DungeonMapService : IDungeonMapService
             }
             Console.WriteLine();
         }
+        Console.WriteLine();
     }
 }

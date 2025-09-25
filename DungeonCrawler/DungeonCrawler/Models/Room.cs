@@ -15,9 +15,14 @@ public abstract class Room
 
 public class EmptyRoom : Room
 {
-    public EmptyRoom()
+    public EmptyRoom(bool isStartRoom)
     {
         Type = RoomEventType.Empty;
+        if (isStartRoom)
+        {
+            WasOpened = true;
+            Symbol = "🔓";
+        }    
     }
 
     public override void Enter(Player player)
@@ -36,7 +41,7 @@ public class TreasureRoom : EmptyRoom
 {
     private readonly IItemFactory _itemFactory;
 
-    public TreasureRoom(IItemFactory itemFactory)
+    public TreasureRoom(IItemFactory itemFactory) : base(false)
     {
         _itemFactory = itemFactory;
         Type = RoomEventType.Treasure;
@@ -62,7 +67,7 @@ public class TreasureRoom : EmptyRoom
 
 public class TrapRoom : EmptyRoom
 {
-    public TrapRoom()
+    public TrapRoom() : base(false)
     {
         Type = RoomEventType.Trap;
     }
@@ -90,7 +95,7 @@ public class MonsterRoom : EmptyRoom
     private readonly IMonsterFactory _monsterFactory;
     private readonly IBattleService _battleService;
 
-    public MonsterRoom(IMonsterFactory monsterFactory, IBattleService battleService)
+    public MonsterRoom(IMonsterFactory monsterFactory, IBattleService battleService) : base(false)
     {
         _monsterFactory = monsterFactory;
         _battleService = battleService;

@@ -36,5 +36,7 @@ static IHostBuilder CreateHostBuilder(string[] args)
             services.AddSingleton<IDungeonMapService, DungeonMapService>();
             services.AddSingleton<IMovementService, MovementService>();
             services.AddSingleton<IGameService, GameService>();
+            services.AddSingleton<ISaveService, SaveService>();
+            services.AddSingleton<IDialogService, DialogService>();
         });
 }

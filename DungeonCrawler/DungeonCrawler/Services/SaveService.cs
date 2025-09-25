@@ -2,35 +2,27 @@
 using DungeonCrawler.Services.Interfaces;
 using DungeonCrawler.Utils;
 using Microsoft.Extensions.Options;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq.Expressions;
 using System.Reflection.Metadata.Ecma335;
 using System.Text.Json;
 
 namespace DungeonCrawler.Services;
 
-public class SaveService
+[ExcludeFromCodeCoverage]
+public class SaveService : ISaveService
 {
     private readonly IDungeonMapService _mapService;
+    private const string FileName = "save.json";
 
     public SaveService(IDungeonMapService dungeonMapService)
     {
-            _mapService = dungeonMapService;
+        _mapService = dungeonMapService;
     }
 
 
-    public void SaveGame(Player player, string filePath)
+    public void SaveGame(Player player)
     {
-        var message = "Do you want to save the game? y/n";
-        var respond = CommunicationService.GetValue(message);
-        if (respond is "n")
-        {
-            return;
-        }
-        if (respond is not "y")
-        {
-            Console.WriteLine("Wrong action");
-            return;
-        }
         var saveModel = new SaveModel
         {
             Player = new PlayerSaveModel
@@ -46,25 +38,30 @@ public class SaveService
         };
 
         var options = new JsonSerializerOptions { WriteIndented = true };
+        var path = Path.Combine(AppContext.BaseDirectory, FileName);
         var json = JsonSerializer.Serialize(saveModel, options);
+        File.WriteAllText(path, json);
+
+        Console.WriteLine($"You saved the game!");
     }
 
-    private RoomSaveModel[,] ConvertMap()
+    private List<List<RoomSaveModel>> ConvertMap()
     {
-        var map = new RoomSaveModel[GameSettings.MaxMazeWidth, GameSettings.MaxMazeHeight];
-        for (var i = 0; i < GameSettings.MaxMazeWidth; i++)
+        var mapList = new List<List<RoomSaveModel>>();
+        for (int y = 0; y < GameSettings.MaxMazeHeight; y++)
         {
-            for (var j = 0; j < GameSettings.MaxMazeHeight; j++)
+            var row = new List<RoomSaveModel>();
+            for (int x = 0; x < GameSettings.MaxMazeWidth; x++)
             {
-                var room = _mapService.GetRoomAt(j, i);
-                map[j, i] = new RoomSaveModel
+                var room = _mapService.GetRoomAt(x, y);
+                row.Add(new RoomSaveModel
                 {
                     EventType = room.Type,
                     WasOpened = room.WasOpened
-                };
+                });
             }
+            mapList.Add(row);
         }
-
-        return map;
+        return mapList;
     }
 }

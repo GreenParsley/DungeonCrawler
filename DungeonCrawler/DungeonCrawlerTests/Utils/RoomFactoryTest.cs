@@ -29,7 +29,7 @@ public class RoomFactoryTest
         //Arrange
 
         //Act
-        var result = _cut.GetRoom();
+        var result = _cut.GetRoom(false);
 
         //Assert
         result.Should().NotBeNull();

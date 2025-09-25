@@ -28,7 +28,7 @@ public class MovementServiceTest
     {
         //Arrange
         var player = new PlayerBuilder().SetName("Jake").SetAttack(1).SetDefense(1).SetHealth(20).SetXPlayerPosition(4).SetYPlayerPosition(4).Build();
-        _mapService.GetRoomAt(expectedX, expectedY).Returns(new EmptyRoom());
+        _mapService.GetRoomAt(expectedX, expectedY).Returns(new EmptyRoom(false));
 
         //Act
         _cut.Move(move, player);

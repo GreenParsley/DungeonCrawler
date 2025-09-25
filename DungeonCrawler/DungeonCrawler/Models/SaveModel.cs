@@ -4,15 +4,15 @@ namespace DungeonCrawler.Models;
 
 public class SaveModel
 {
-    public PlayerSaveModel Player { get; set; }
-    public RoomSaveModel[,] Map { get; set; }
+    public PlayerSaveModel Player { get; set; } = null!;
+    public List<List<RoomSaveModel>> Map { get; set; } = null!;
     public int PlayerX { get; set; }
     public int PlayerY { get; set; }
 }
 
 public class PlayerSaveModel
 {
-    public string Name { get; set; }
+    public string Name { get; set; } = null!;
     public int Health { get; set; }
     public int Attack { get; set; }
     public int Defense { get; set; }
