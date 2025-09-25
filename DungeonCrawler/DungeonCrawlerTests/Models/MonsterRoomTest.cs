@@ -17,7 +17,7 @@ public class MonsterRoomTest
     {
         _factory = Substitute.For<IMonsterFactory>();
         _battleService = Substitute.For<IBattleService>();
-        _cut = new MonsterRoom(_factory, _battleService);
+        _cut = new MonsterRoom(_factory, _battleService, false);
     }
 
     [Fact]

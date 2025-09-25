@@ -1,7 +1,7 @@
 ﻿using DungeonCrawler.Enums;
 using DungeonCrawler.Models;
-using DungeonCrawler.Services;
 using DungeonCrawler.Services.Interfaces;
+using System.Numerics;
 
 namespace DungeonCrawler;
 
@@ -10,12 +10,17 @@ public class App
     private readonly IMovementService _movementService;
     private readonly IGameService _gameService;
     private readonly IDungeonMapService _mapService;
+    private readonly IDialogService _dialogService;
+    private GameMenuState _lastMenuState = GameMenuState.MainMenu;
+    private readonly ISaveService _saveService;
 
-    public App(IMovementService movementService, IGameService gameService, IDungeonMapService mapService)
+    public App(IMovementService movementService, IGameService gameService, IDungeonMapService mapService, IDialogService dialogService, ISaveService saveService)
     {
         _movementService = movementService;
         _gameService = gameService;
         _mapService = mapService;
+        _dialogService = dialogService;
+        _saveService = saveService;
     }
 
     public void Run(string[] args)
@@ -24,25 +29,72 @@ public class App
         player.DisplayStats();
         while (!_gameService.IsOnExit(player) && !_gameService.IsDead(player))
         {
-            _mapService.DisplayMap(player.XPlayerPosition, player.YPlayerPosition);
-            player.UseItem();
-            var move = GetPlayerMove();
-            var isMovePossible = _movementService.CheckMove(move, player);
-            if (!isMovePossible)
-            {
-                Console.WriteLine("You are at the edge of the labyrinth.");
-                continue;
-            }
-
-            _movementService.Move(move, player);
+            GetPlayerAction(player);
         }
-
     }
 
-    private MoveType GetPlayerMove()
+    private void GetPlayerAction(Player player)
     {
-        var message = $"Which way do you want to go?: {MoveType.Left}, {MoveType.Right}, {MoveType.Up} or {MoveType.Down}.";
-        var move = CommunicationService.GetValue(message, MoveType.Left.ToString(), MoveType.Right.ToString(), MoveType.Up.ToString(), MoveType.Down.ToString());
-        return Enum.Parse<MoveType>(move, true);
+        switch(_lastMenuState)
+        {
+            case GameMenuState.MainMenu:
+                var selectedMenu = _dialogService.GetSelectedOptionFromMainMenu();
+                _lastMenuState = selectedMenu;
+                break;
+            case GameMenuState.MovementMenu:
+                _mapService.DisplayMap(player.XPlayerPosition, player.YPlayerPosition);
+                var action = _dialogService.GetMoveTypeFromMovementMenu();
+                if (action == MoveType.Back)
+                    _lastMenuState = GameMenuState.MainMenu;
+                else
+                {
+                    var isMovePossible = _movementService.CheckMove(action, player);
+                    if (!isMovePossible)
+                    {
+                        Console.WriteLine("You are at the edge of the labyrinth.");
+                        break;
+                    }
+
+                    _movementService.Move(action, player);
+                    _lastMenuState = GameMenuState.MovementMenu;
+                }
+                    break;
+            case GameMenuState.InventoryMenu:
+                var index = _dialogService.GetItemIndexFromInventoryMenu(player);
+                if (index == 0)
+                    _lastMenuState = GameMenuState.MainMenu;
+                else
+                {
+                    player.UseItem(index - 1);
+                    _lastMenuState = GameMenuState.InventoryMenu;
+                }
+                break;
+            case GameMenuState.LoadGame:
+                var loadedModel = _saveService.LoadGame();
+                LoadData(loadedModel, player);
+                Console.WriteLine("Successfully loaded!");
+                player.DisplayStats();
+                _lastMenuState = GameMenuState.MainMenu;
+                break;
+            case GameMenuState.SaveGame:
+                _saveService.SaveGame(player);
+                _lastMenuState = GameMenuState.MainMenu;
+                break;
+            case GameMenuState.CloseGame:
+                Environment.Exit(0);
+                break;
+
+        }  
     }
+
+    private void LoadData(SaveModel data, Player player)
+    {
+        player.Health = data.Player.Health;
+        player.Attack = data.Player.Attack;
+        player.Defense = data.Player.Defense;
+        player.XPlayerPosition = data.PlayerX;
+        player.YPlayerPosition = data.PlayerY;
+        _mapService.LoadRooms(data.Map);
+    }
+
 }

@@ -1,4 +1,5 @@
-﻿using DungeonCrawler.Services.Interfaces;
+﻿using DungeonCrawler.Enums;
+using DungeonCrawler.Services.Interfaces;
 using DungeonCrawler.Utils;
 using DungeonCrawler.Utils.Interfaces;
 
@@ -6,6 +7,7 @@ namespace DungeonCrawler.Models;
 
 public abstract class Room
 {
+    public RoomEventType Type { get; set; }
     public bool WasOpened { get; protected set; }
     public string Symbol { get; protected set; } = "❓";
     public abstract void Enter(Player player);
@@ -13,6 +15,16 @@ public abstract class Room
 
 public class EmptyRoom : Room
 {
+    public EmptyRoom(bool isOpen)
+    {
+        Type = RoomEventType.Empty;
+        if (isOpen)
+        {
+            WasOpened = true;
+            Symbol = "🔓";
+        }    
+    }
+
     public override void Enter(Player player)
     {
         if (!WasOpened)
@@ -29,9 +41,15 @@ public class TreasureRoom : EmptyRoom
 {
     private readonly IItemFactory _itemFactory;
 
-    public TreasureRoom(IItemFactory itemFactory)
+    public TreasureRoom(IItemFactory itemFactory, bool isOpen) : base(false)
     {
         _itemFactory = itemFactory;
+        Type = RoomEventType.Treasure;
+        if (isOpen)
+        {
+            WasOpened = true;
+            Symbol = "💰";
+        }
     }
 
     public override void Enter(Player player)
@@ -54,6 +72,16 @@ public class TreasureRoom : EmptyRoom
 
 public class TrapRoom : EmptyRoom
 {
+    public TrapRoom(bool isOpen) : base(false)
+    {
+        Type = RoomEventType.Trap;
+        if (isOpen)
+        {
+            WasOpened = true;
+            Symbol = "⚠️";
+        }
+    }
+
     public override void Enter(Player player)
     {
         if (!WasOpened)
@@ -77,10 +105,16 @@ public class MonsterRoom : EmptyRoom
     private readonly IMonsterFactory _monsterFactory;
     private readonly IBattleService _battleService;
 
-    public MonsterRoom(IMonsterFactory monsterFactory, IBattleService battleService)
+    public MonsterRoom(IMonsterFactory monsterFactory, IBattleService battleService, bool isOpen) : base(false)
     {
         _monsterFactory = monsterFactory;
         _battleService = battleService;
+        Type = RoomEventType.Monster;
+        if (isOpen)
+        {
+            WasOpened = true;
+            Symbol = "💀";
+        }
     }
     public override void Enter(Player player)
     {

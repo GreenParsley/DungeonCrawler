@@ -27,19 +27,38 @@ public class RoomFactory : IRoomFactory
         _battleService = battleService;
     }
 
-    public Room GetRoom()
+    public Room GetRoom(bool isStartRoom)
     {
-        var roomType = GetRoomEventType();
+        var roomType = isStartRoom ?
+            RoomEventType.Empty :
+            GetRoomEventType();
         switch (roomType)
         {
             case RoomEventType.Treasure:
-                return new TreasureRoom(_itemFactory);
+                return new TreasureRoom(_itemFactory, isStartRoom);
             case RoomEventType.Trap:
-                return new TrapRoom();
+                return new TrapRoom(isStartRoom);
             case RoomEventType.Empty:
-                return new EmptyRoom();
+                return new EmptyRoom(isStartRoom);
             case RoomEventType.Monster:
-                return new MonsterRoom(_monsterFactory, _battleService);
+                return new MonsterRoom(_monsterFactory, _battleService, isStartRoom);
+            default:
+                throw new Exception();
+        }
+    }
+
+    public Room GetRoom(RoomSaveModel room)
+    {
+        switch (room.EventType)
+        {
+            case RoomEventType.Treasure:
+                return new TreasureRoom(_itemFactory, room.WasOpened);
+            case RoomEventType.Trap:
+                return new TrapRoom(room.WasOpened);
+            case RoomEventType.Empty:
+                return new EmptyRoom(room.WasOpened);
+            case RoomEventType.Monster:
+                return new MonsterRoom(_monsterFactory, _battleService, room.WasOpened);
             default:
                 throw new Exception();
         }

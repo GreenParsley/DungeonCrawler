@@ -13,17 +13,21 @@ public static class CommunicationService
             try
             {
                 var value = Console.ReadLine();
+                if (value == null)
+                {
+                    continue;
+                }
+                Console.WriteLine();
                 return value;
             }
             catch (Exception)
             {
-
                 Console.WriteLine("Wrong action.");
             }
         }
     }
 
-    public static string GetValue(string message, params string[] availableValues)
+    public static int GetIndex(string message, int size)
     {
         Console.WriteLine(message);
         while (true)
@@ -31,44 +35,42 @@ public static class CommunicationService
             try
             {
                 var value = Console.ReadLine();
-                if (!availableValues.Any(x => x.Equals(value!.ToLower(), StringComparison.OrdinalIgnoreCase)))
+                if (value is null || int.Parse(value) >= size)
                 {
                     Console.WriteLine("Wrong action.");
                     continue;
                 }
-                return value!;
+                Console.WriteLine();
+                return int.Parse(value);
             }
             catch (Exception)
             {
-
                 Console.WriteLine("Wrong action.");
             }
         }
     }
 
-    public static (bool HasQuit, int Index) GetIndex(int size)
+    public static T GetEnumChoice<T>(string message, params T[] allowed) where T : struct, Enum
     {
+        Console.WriteLine(message);
+
+        var availableValues = allowed
+            .Select(v => Convert.ToInt32(v))
+            .ToList();
+
         while (true)
         {
-            try
-            {
-                var value = Console.ReadLine();
-                if (value.ToLower() == "q")
-                {
-                    return (true, -1);
-                }
-                else if (int.Parse(value) >= size)
-                {
-                    Console.WriteLine("Wrong action.");
-                    continue;
-                }
-                return (false, int.Parse(value));
-            }
-            catch (Exception)
-            {
+            var input = Console.ReadLine();
 
-                Console.WriteLine("Wrong action.");
+            if (int.TryParse(input, out var intValue))
+            {
+                if (availableValues.Contains(intValue))
+                {
+                    Console.WriteLine();
+                    return (T)(object)intValue;
+                }
             }
+            Console.WriteLine("Wrong action. Try again.");
         }
     }
 }

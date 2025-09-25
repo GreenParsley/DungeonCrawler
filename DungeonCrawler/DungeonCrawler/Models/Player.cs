@@ -1,7 +1,7 @@
 ﻿using DungeonCrawler.Interfaces;
 using DungeonCrawler.Services;
+using System;
 using System.Diagnostics.CodeAnalysis;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace DungeonCrawler.Models;
 
@@ -41,32 +41,15 @@ public class Player : ICharacter
         Inventory.Add(item); 
     }
 
-    public void UseItem()
+    public void UseItem(int index)
     {
         if (Inventory.Count == 0)
             return;
 
-        var isOpen = CommunicationService.GetValue("Do you want to open your inventory? y/n");
-        if (isOpen != "y")
-        {
-            return;
-        }
-
-        Console.WriteLine("Which item do you want to use? Select a number.");
-        for (int i = 0; i < Inventory.Count; i++)
-        {
-            Console.WriteLine($"{i} - {Inventory[i].Name}");
-        }
-
-        Console.WriteLine("Q - quit");
-        var action = CommunicationService.GetIndex(Inventory.Count);
-        if (!action.HasQuit)
-        {
-            var item = Inventory[action.Index];
-            item.Use(this);
-            Inventory.Remove(item);
-            DisplayStats();
-        }
+        var item = Inventory[index];
+        item.Use(this);
+        Inventory.Remove(item);
+        DisplayStats();
     }
 
     [ExcludeFromCodeCoverage]

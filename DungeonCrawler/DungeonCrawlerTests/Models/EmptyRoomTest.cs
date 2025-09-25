@@ -10,7 +10,7 @@ public class EmptyRoomTest
 
     public EmptyRoomTest()
     {
-        _cut = new EmptyRoom();
+        _cut = new EmptyRoom(false);
     }
 
     [Fact]

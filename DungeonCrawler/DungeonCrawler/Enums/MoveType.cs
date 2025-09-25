@@ -2,8 +2,9 @@
 
 public enum MoveType
 {
-    Left,
-    Right,
-    Up,
-    Down
+    Left = 1,
+    Right = 2,
+    Up = 3,
+    Down = 4,
+    Back = 0
 }

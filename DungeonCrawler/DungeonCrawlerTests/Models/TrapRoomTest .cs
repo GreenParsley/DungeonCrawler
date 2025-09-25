@@ -11,7 +11,7 @@ public class TrapRoomTest
 
     public TrapRoomTest()
     {
-        _cut = new TrapRoom();
+        _cut = new TrapRoom(false);
     }
 
     [Fact]

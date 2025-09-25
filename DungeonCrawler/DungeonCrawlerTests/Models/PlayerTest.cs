@@ -8,10 +8,12 @@ public class PlayerTest
 {
     private readonly Player _cut;
     private readonly int _baseHealth = 10;
+    private readonly int _baseAttack = 3;
+    private readonly int _baseDefense = 2;
 
     public PlayerTest()
     {
-        _cut = new Player("ork slayer", _baseHealth, 3, 2);
+        _cut = new Player("ork slayer", _baseHealth, _baseAttack, _baseDefense);
     }
 
     [Theory]
@@ -74,5 +76,23 @@ public class PlayerTest
 
         //Assert
         _cut.Inventory.Should().Contain(item);
+    }
+
+    [Fact]
+    public void UseItem_UseAndRemoveUsedItem_WhenPlayyerUsesItem()
+    {
+        //Arrange
+        var bonus = 1;
+        var item = new ItemBuilder().SetName("Item").SetAttackBonus(bonus).SetDefenseBonus(bonus).SetHealing(bonus).Build();
+        _cut.AddItem(item);
+
+        //Act
+        _cut.UseItem(0);
+
+        //Assert
+        _cut.Inventory.Count.Should().Be(0);
+        _cut.Attack.Should().Be(_baseAttack + bonus);
+        _cut.Defense.Should().Be(_baseDefense + bonus);
+        _cut.Health.Should().Be(_baseHealth + bonus);
     }
 }

@@ -14,7 +14,7 @@ public class TreasureRoomTest
     public TreasureRoomTest()
     {
         _factory = Substitute.For<ItemFactory>();
-        _cut = new TreasureRoom(_factory);
+        _cut = new TreasureRoom(_factory, false);
     }
 
     [Fact]
