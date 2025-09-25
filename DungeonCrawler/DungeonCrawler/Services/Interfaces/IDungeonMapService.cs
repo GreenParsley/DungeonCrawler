@@ -6,5 +6,6 @@ namespace DungeonCrawler.Services.Interfaces
     {
         void DisplayMap(int xPlayerPosition, int yPlayerPosition);
         Room GetRoomAt(int x, int y);
+        void LoadRooms(List<List<RoomSaveModel>> map);
     }
 }

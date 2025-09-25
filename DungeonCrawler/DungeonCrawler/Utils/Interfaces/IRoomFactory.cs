@@ -5,5 +5,6 @@ namespace DungeonCrawler.Utils.Interfaces
     public interface IRoomFactory
     {
         Room GetRoom(bool isStartRoom);
+        Room GetRoom(RoomSaveModel roomSaveModel);
     }
 }

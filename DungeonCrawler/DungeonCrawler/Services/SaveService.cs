@@ -45,6 +45,26 @@ public class SaveService : ISaveService
         Console.WriteLine($"You saved the game!");
     }
 
+    public SaveModel LoadGame()
+    {
+        var path = Path.Combine(AppContext.BaseDirectory, "save.json");
+        if (!File.Exists(path))
+        {
+            Console.WriteLine("Save file not found.");
+            return null!;
+        }
+
+        var json = File.ReadAllText(path);
+
+        var options = new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true
+        };
+
+        var saveModel = JsonSerializer.Deserialize<SaveModel>(json, options);
+        return saveModel!;
+    }
+
     private List<List<RoomSaveModel>> ConvertMap()
     {
         var mapList = new List<List<RoomSaveModel>>();

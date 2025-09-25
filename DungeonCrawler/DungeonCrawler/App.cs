@@ -69,6 +69,13 @@ public class App
                     _lastMenuState = GameMenuState.InventoryMenu;
                 }
                 break;
+            case GameMenuState.LoadGame:
+                var loadedModel = _saveService.LoadGame();
+                LoadData(loadedModel, player);
+                Console.WriteLine("Successfully loaded!");
+                player.DisplayStats();
+                _lastMenuState = GameMenuState.MainMenu;
+                break;
             case GameMenuState.SaveGame:
                 _saveService.SaveGame(player);
                 _lastMenuState = GameMenuState.MainMenu;
@@ -79,4 +86,15 @@ public class App
 
         }  
     }
+
+    private void LoadData(SaveModel data, Player player)
+    {
+        player.Health = data.Player.Health;
+        player.Attack = data.Player.Attack;
+        player.Defense = data.Player.Defense;
+        player.XPlayerPosition = data.PlayerX;
+        player.YPlayerPosition = data.PlayerY;
+        _mapService.LoadRooms(data.Map);
+    }
+
 }

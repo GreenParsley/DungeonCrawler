@@ -10,8 +10,8 @@ public class DialogService : IDialogService
 {
     public GameMenuState GetSelectedOptionFromMainMenu()
     {
-        return CommunicationService.GetEnumChoice<GameMenuState>("2 - Move\n3 - Inventory\n9 - Save\n0 - Close\n",
-            GameMenuState.InventoryMenu, GameMenuState.MovementMenu, GameMenuState.SaveGame, GameMenuState.CloseGame);
+        return CommunicationService.GetEnumChoice<GameMenuState>("2 - Move\n3 - Inventory\n8 - Load\n9 - Save\n0 - Close\n",
+            GameMenuState.InventoryMenu, GameMenuState.MovementMenu, GameMenuState.LoadGame, GameMenuState.SaveGame, GameMenuState.CloseGame);
     }
 
     public MoveType GetMoveTypeFromMovementMenu()
